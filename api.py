@@ -2,6 +2,7 @@ from fastapi import FastAPI, WebSocket
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
+from json import loads
 
 app = FastAPI()
 
@@ -10,8 +11,8 @@ base = {"http://smbc-comics.com": "  \n\n \n\n \n  \n\nYOU KNOW HOW YOU SIT ON T
 
 @app.get("/base")
 async def root():
-    #if item_id == '': pass
-    return base
+    with open('data', 'r') as f:
+        return loads(f.read())
 
 
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

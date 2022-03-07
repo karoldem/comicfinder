@@ -37,76 +37,42 @@
 
     methods:{
       send(event){
-        if (debuggingToggler)
-        {
 
-          axios
-            .get('/base')
-            .then(response => {
-              this.base = response.data
-              this.result = {}
-              for (const [key, value] of Object.entries(this.base)) {
+        this.result = {}
+        for (const [key, value] of Object.entries(this.base)) {
 
-                var matchExists = false;
+          var matchExists = false;
 
-                this.search.split(' ').forEach((element) => {
+          this.search.split(' ').forEach((element) => {
 
-                  if (value.includes(element.toUpperCase())){
-                    if (matchExists) { this.result[key] +=1; }
-                    else {
-                      matchExists = true;
-                      this.result[key] = 1;
-                    }
-
-                  }
-                });
+            if (value.includes(element.toUpperCase())){
+              if (matchExists) { this.result[key] +=1; }
+              else {
+                matchExists = true;
+                this.result[key] = 1;
               }
 
-              var items = Object.keys(this.result).map(
-                (key) => { return [key, this.result[key]] });
-
-              items.sort(
-                (first, second) => { return first[1] - second[1] }
-              ).reverse();
-              this.result = items;
-
-            })
-
+            }
+          });
         }
-        else{
-        if (event !== ''){
-          this.result = {}
-          for (const [key, value] of Object.entries(base)) {
 
-            var matchExists = false;
+        var items = Object.keys(this.result).map(
+          (key) => { return [key, this.result[key]] });
 
-            this.search.split(' ').forEach((element) => {
-
-              if (value.includes(element.toUpperCase())){
-                if (matchExists) { this.result[key] +=1; }
-                else {
-                  matchExists = true;
-                  this.result[key] = 1;
-                }
-
-              }
-            });
-          }
-
-          var items = Object.keys(this.result).map(
-            (key) => { return [key, this.result[key]] });
-
-          items.sort(
-            (first, second) => { return first[1] - second[1] }
-          ).reverse();
-          this.result = items;
-
-        }}
+        items.sort(
+          (first, second) => { return first[1] - second[1] }
+        ).reverse();
+        this.result = items;
       }
     },
-    
+
     mounted(){
-      this.variableForDebuging = 'd';
+      axios
+        .get('/base')
+        .then(response => {
+          this.base = response.data;
+
+        })
     }
 
   }).mount('#app')
