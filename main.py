@@ -1,4 +1,15 @@
-import uvicorn
+# main.py
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from json import loads
 
-if __name__ == "__main__":
-    uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True)
+app = FastAPI()
+
+@app.get("/base")
+async def root():
+    #return { "http://smbc-comics.com": " \n\n \n\n \n \n\nYOU KNO"}
+    with open('data', 'r') as f:
+        return loads(f.read())
+
+
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
